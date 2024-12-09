@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fractal Tree</title>
+</head>
+<body>
+    <canvas id="fractalCanvas" width="600" height="600" style="border: 1px solid black;"></canvas>
+    <script>
+        const canvas = document.getElementById('fractalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawFractal(x, y, size, angle, depth, total) {
+            if (depth === 0) {
+                return;
+            }
+
+            const x1 = x + size * Math.cos(angle);
+            const y1 = y + size * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x1, y1);
+            ctx.strokeStyle = `rgba(0, ${depth * 10}, 0, ${depth / total})`;
+            ctx.lineWidth = depth / 5;
+            ctx.stroke();
+
+            setTimeout(() => {
+                drawFractal(x1, y1, size * 0.75, angle - Math.PI / 6, depth - 1, total);
+                drawFractal(x1, y1, size * 0.75, angle + Math.PI / 6, depth - 1, total);
+            }, 1000);
+        }
+
+        const startX = canvas.width / 2;
+        const startY = canvas.height;
+        const total = 10;
+
+        drawFractal(startX, startY, 125, -Math.PI / 2, total, total);
+    </script>
+</body>
+</html>
